@@ -25,7 +25,7 @@ jobs:
       
       - name: Save Docker image as tarball
         run: |
-          docker save -o my-docker-image.tar my-image-name:tag
+          docker save -o northstar.tar littletonrobotics/northstar:latest
       
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v3
