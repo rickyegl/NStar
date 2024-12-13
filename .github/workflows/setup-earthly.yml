@@ -10,9 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
       FORCE_COLOR: 1
     steps:
       - name: Checkout repository
@@ -23,10 +20,16 @@ jobs:
         with:
           version: v0.8.6
       
-      - name: Docker Login
+      - name: Build Docker image with Earthly
         run: |
-          echo "$DOCKERHUB_TOKEN" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+          earthly --ci +image
       
-      - name: Build and push Docker image with Earthly
+      - name: Save Docker image as tarball
         run: |
-          earthly --ci --push +image
+          docker save -o my-docker-image.tar my-image-name:tag
+      
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image
+          path: my-docker-image.tar
