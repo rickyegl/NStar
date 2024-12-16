@@ -14,23 +14,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+
       - name: Set up Earthly
         uses: earthly/actions/setup-earthly@v1
         with:
           version: v0.8.6
-      
-      - name: Build Docker image with Earthly
-        run: earthly --ci +ns-image
 
-      - name: List Docker images
+      - name: Build and export Docker image with Earthly
+        run: |
+          earthly --ci +save-image 
+          # Note: This assumes your Earthfile has a target 'save-image' 
+          # that includes a 'SAVE IMAGE ... AS LOCAL ...' command 
+          # to save the Docker image as a tarball.
+
+      - name: List Docker images (for debugging)
         run: docker images
-      
-      - name: Save Docker image as tarball
-        run: docker save -o northstar.tar rickyegl/northstar:latest
-          
+
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v3
         with:
           name: docker-image
-          path: my-docker-image.tar
+          path: northstar.tar  # The path where Earthly saved the image
