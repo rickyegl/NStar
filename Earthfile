@@ -92,6 +92,7 @@ gst-bin:
 
 ns-image:
     FROM --platform=linux/arm64 debian:bookworm-20240110
+    RUN apt-get update && apt-get install -y docker.io
     COPY --symlink-no-follow +sysroot-openblas-alternatives/* /etc/alternatives
     COPY --symlink-no-follow +sysroot-libs/* /usr/lib/aarch64-linux-gnu
     COPY --symlink-no-follow +gst-bin/* /usr/bin/
@@ -105,6 +106,6 @@ ns-image:
     SAVE IMAGE rickyegl/northstar:latest
 
 save-image:
-    FROM +ns-image
+    FROM --platform=linux/arm64 +ns-image  # Target the platform here
     RUN docker save -o northstar.tar rickyegl/northstar:latest
     SAVE ARTIFACT northstar.tar
