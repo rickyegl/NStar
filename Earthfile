@@ -1,4 +1,4 @@
-VERSION 0.7
+VERSION 0.8
 FROM debian:bookworm-20240110
 RUN apt-get update -y
 WORKDIR /RobotCode2024/vision
