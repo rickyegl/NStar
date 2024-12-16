@@ -1,4 +1,4 @@
-VERSION 0.8
+VERSION 0.7
 FROM debian:bookworm-20240110
 RUN apt-get update -y
 WORKDIR /RobotCode2024/vision
@@ -92,7 +92,6 @@ gst-bin:
 
 ns-image:
     FROM --platform=linux/arm64 debian:bookworm-20240110
-    RUN apt-get update && apt-get install -y docker.io
     COPY --symlink-no-follow +sysroot-openblas-alternatives/* /etc/alternatives
     COPY --symlink-no-follow +sysroot-libs/* /usr/lib/aarch64-linux-gnu
     COPY --symlink-no-follow +gst-bin/* /usr/bin/
@@ -104,8 +103,3 @@ ns-image:
     ENV PATH=/python3-host/bin:$PATH
     COPY --dir northstar /RobotCode2024/vision/northstar
     SAVE IMAGE rickyegl/northstar:latest
-
-save-image:
-    FROM --platform=linux/arm64 +ns-image  # Target the platform here
-    RUN docker save -o northstar.tar rickyegl/northstar:latest
-    SAVE ARTIFACT northstar.tar
