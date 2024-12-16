@@ -105,6 +105,5 @@ ns-image:
     SAVE IMAGE rickyegl/northstar:latest
 
 save-image:
-    FROM +ns-image AS northstar-image
-    RUN docker load -i northstar.tar
-    SAVE IMAGE northstar-image AS LOCAL northstar.tar
+    FROM +ns-image
+    SAVE ARTIFACT northstar.tar WITH DOCKERFILE ./Dockerfile
