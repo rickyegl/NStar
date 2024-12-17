@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: docker-image
-          path: my-docker-image.tar
+          path: northstar.tar
