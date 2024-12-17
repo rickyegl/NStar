@@ -24,7 +24,7 @@ jobs:
         run: earthly --ci +ns-image
 
       - name: List Docker images
-        run: docker images
+        run: docker images ls
       
       - name: Save Docker image as tarball
         run: docker save -o northstar.tar rickyegl/northstar:latest
