@@ -21,7 +21,7 @@ jobs:
           version: v0.8.6
       
       - name: Build Docker image with Earthly
-        run: earthly --ci +ns-image
+        run: earthly --strict +ns-image
 
       - name: List Docker images
         run: docker image ls
