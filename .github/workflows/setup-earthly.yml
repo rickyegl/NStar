@@ -27,7 +27,7 @@ jobs:
         run: docker images
       
       - name: Save Docker image as tarball
-        run: docker save -o northstar.tar rickyegl/NStar:latest
+        run: docker save -o northstar.tar rickyegl/northstar:latest
           
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v3
