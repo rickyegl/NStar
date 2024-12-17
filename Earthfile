@@ -103,3 +103,4 @@ ns-image:
     ENV PATH=/python3-host/bin:$PATH
     COPY --dir northstar /RobotCode2024/vision/northstar
     SAVE IMAGE rickyegl/northstar:latest
+    SAVE ARCHIVE northstar.tar
