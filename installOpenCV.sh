@@ -1,28 +1,39 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Set -e to exit on any error
-set -e
+# Stop on errors and print commands
+set -euxo pipefail
 
-# Install dependencies
-apt-get clean -y && apt-get update -y && apt-get install -y libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libtbbmalloc2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-dev gfortran openexr libatlas-base-dev
-apt-get clean -y && apt-get update -y && apt-get install -y libgstreamer1.0-dev
-apt-get clean -y && apt-get update -y && apt-get install -y libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-base
-apt-get clean -y && apt-get update -y && apt-get install -y libgstreamer-plugins-bad1.0-dev  gstreamer1.0-plugins-bad
-apt-get clean -y && apt-get update -y && apt-get install -y gstreamer1.0-plugins-good
-apt-get clean -y && apt-get update -y && apt-get install -y gstreamer1.0-plugins-ugly
-apt-get clean -y && apt-get update -y && apt-get install -y gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-gl
+###############################################################################
+# 1) Install dependencies
+###############################################################################
+sudo apt-get update -y
 
-# Download OpenCV and OpenCV Contrib
+# Core libraries for building OpenCV with gstreamer support, codecs, etc.
+sudo apt-get install -y \
+    libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
+    libxvidcore-dev libx264-dev libtbb-dev libjpeg-dev libpng-dev \
+    libtiff-dev libdc1394-dev gfortran openexr libatlas-base-dev \
+    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-base \
+    libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly \
+    gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-gl \
+    clang wget cmake build-essential pkg-config
+
+###############################################################################
+# 2) Download OpenCV source (4.6.0) and contrib modules
+###############################################################################
 wget -O opencv.tar.gz https://github.com/opencv/opencv/archive/refs/tags/4.6.0.tar.gz
 wget -O opencv_contrib.tar.gz https://github.com/opencv/opencv_contrib/archive/refs/tags/4.6.0.tar.gz
 
-# Extract archives
 tar -zvxf opencv.tar.gz
 tar -zvxf opencv_contrib.tar.gz
 
-# Build OpenCV
-mkdir -p opencv-4.6.0/build
-cd opencv-4.6.0/build
+###############################################################################
+# 3) Build and install OpenCV
+###############################################################################
+cd opencv-4.6.0
+mkdir -p build
+cd build
 
 # Dynamically determine Python3 details
 PYTHON3_EXECUTABLE=$(which python3)
@@ -37,14 +48,6 @@ PYTHON3_NUMPY_INCLUDE_DIRS=$(python3 -c "import numpy; print(numpy.get_include()
 PYTHON3_LIB_NAME="python${PYTHON3_VERSION}"
 PYTHON3_LIBRARIES=$(find /usr/lib* -name "lib${PYTHON3_LIB_NAME}.so" -o -name "lib${PYTHON3_LIB_NAME}.a" 2>/dev/null | head -n 1)
 
-if [ -z "$PYTHON3_LIBRARIES" ]; then
-  echo "Error: Could not find Python library lib${PYTHON3_LIB_NAME}.so or .a"
-  echo "Please ensure you have the Python development package installed."
-  echo "For example, on Debian/Ubuntu: sudo apt-get install python${PYTHON3_VERSION}-dev"
-  exit 1
-fi
-
-# Configure CMake - Customize the following options as needed
 cmake \
   -DCMAKE_INSTALL_PREFIX=/usr/local \
   -DWITH_GSTREAMER=ON \
@@ -62,8 +65,7 @@ cmake \
   -DENABLE_LTO=ON \
   ..
 
-# Build and install
-make -j$(nproc)
-make install
+make -j"$(nproc)"
+sudo make install
 
-echo "OpenCV installed successfully!"
+echo "OpenCV 4.6.0 installation complete!"
