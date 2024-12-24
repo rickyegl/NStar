@@ -24,18 +24,23 @@ tar -zvxf opencv_contrib.tar.gz
 mkdir -p opencv-4.6.0/build
 cd opencv-4.6.0/build
 
-# Assuming you have python3 installed on your host
+# Dynamically determine Python3 details
 PYTHON3_EXECUTABLE=$(which python3)
-PYTHON3_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+PYTHON3_VERSION_MAJOR=$(python3 -c "import sys; print(sys.version_info.major)")
+PYTHON3_VERSION_MINOR=$(python3 -c "import sys; print(sys.version_info.minor)")
+PYTHON3_VERSION="${PYTHON3_VERSION_MAJOR}.${PYTHON3_VERSION_MINOR}"
 PYTHON3_LIB_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_path('purelib'))")
 PYTHON3_INCLUDE_DIR=$(python3 -c "import sysconfig; print(sysconfig.get_path('include'))")
 PYTHON3_NUMPY_INCLUDE_DIRS=$(python3 -c "import numpy; print(numpy.get_include())")
 
-# Determine Python library path based on version
-if [[ "$PYTHON3_VERSION" == "3.10" ]]; then
-  PYTHON3_LIBRARIES=$(python3-config --prefix)/lib/libpython3.10.so
-else
-  echo "Error: Unsupported Python version. This script is designed for Python 3.10."
+# Find Python library - more robust method
+PYTHON3_LIB_NAME="python${PYTHON3_VERSION}"
+PYTHON3_LIBRARIES=$(find /usr/lib* -name "lib${PYTHON3_LIB_NAME}.so" -o -name "lib${PYTHON3_LIB_NAME}.a" 2>/dev/null | head -n 1)
+
+if [ -z "$PYTHON3_LIBRARIES" ]; then
+  echo "Error: Could not find Python library lib${PYTHON3_LIB_NAME}.so or .a"
+  echo "Please ensure you have the Python development package installed."
+  echo "For example, on Debian/Ubuntu: sudo apt-get install python${PYTHON3_VERSION}-dev"
   exit 1
 fi
 
@@ -48,7 +53,7 @@ cmake \
   -DPYTHON3_LIBRARIES="$PYTHON3_LIBRARIES" \
   -DPYTHON3_NUMPY_INCLUDE_DIRS="$PYTHON3_NUMPY_INCLUDE_DIRS" \
   -DPYTHON3_INCLUDE_PATH="$PYTHON3_INCLUDE_DIR" \
-  -DPYTHON3_CVPY_SUFFIX=".cpython-${PYTHON3_VERSION}-x86_64-linux-gnu.so" \
+  -DPYTHON3_CVPY_SUFFIX=".cpython-${PYTHON3_VERSION_MAJOR}${PYTHON3_VERSION_MINOR}-x86_64-linux-gnu.so" \
   -DBUILD_NEW_PYTHON_SUPPORT=ON \
   -DBUILD_opencv_python3=ON \
   -DHAVE_opencv_python3=ON \
