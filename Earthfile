@@ -9,7 +9,7 @@ xx:
 
 py-build:
     COPY +xx/* /usr/bin
-    RUN apt-get install -y wget build-essential cmake libffi-dev libssl-dev zlib1g-dev
+    RUN apt-get install -y wget build-essential cmake libffi-dev libssl-dev zlib1g-dev vim libblas3
     RUN wget https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tgz
     RUN tar -zvxf Python-3.10.13.tgz
     RUN cp -r Python-3.10.13 Python-3.10.13-host
