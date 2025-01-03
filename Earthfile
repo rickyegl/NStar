@@ -102,4 +102,5 @@ ns-image:
     ENV LD_LIBRARY_PATH=/python3-host/lib
     ENV PATH=/python3-host/bin:$PATH
     COPY --dir northstar /RobotCode2024/vision/northstar
+    ENTRYPOINT ["python3", "/RobotCode2024/vision/northstar/__init__.py"]
     SAVE IMAGE rickyegl/northstar:latest
