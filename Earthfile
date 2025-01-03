@@ -9,7 +9,7 @@ xx:
 
 py-build:
     COPY +xx/* /usr/bin
-    RUN apt-get install -y wget build-essential cmake libffi-dev libssl-dev zlib1g-dev vim libblas3 v4l-utils
+    RUN apt-get install -y wget build-essential cmake libffi-dev libssl-dev zlib1g-dev
     RUN wget https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tgz
     RUN tar -zvxf Python-3.10.13.tgz
     RUN cp -r Python-3.10.13 Python-3.10.13-host
@@ -41,7 +41,7 @@ py-deps:
     RUN apt-get update -y && apt-get install -y dh-autoreconf
     # If gfortran-aarch64-linux-gnu does not exist, we are on arm64, so just install gfortran
     RUN apt-get update -y && (apt-get install -y gfortran-aarch64-linux-gnu || apt-get install -y gfortran)
-    RUN TARGETPLATFORM=linux/arm64 xx-apt-get update -y && TARGETPLATFORM=linux/arm64 xx-apt-get install -y libopenblas-dev libjpeg-dev
+    RUN TARGETPLATFORM=linux/arm64 xx-apt-get update -y && TARGETPLATFORM=linux/arm64 xx-apt-get install -y libopenblas-dev libjpeg-dev vim libblas3 v4l-utils
     RUN wget https://files.pythonhosted.org/packages/a4/9b/027bec52c633f6556dba6b722d9a0befb40498b9ceddd29cbe67a45a127c/numpy-1.24.4.tar.gz
     RUN tar -zvxf numpy-1.24.4.tar.gz
     COPY numpy-aarch64-linux-gnu-site.cfg numpy-1.24.4/site.cfg
