@@ -1,5 +1,3 @@
-if __name__ == "__main__":
-  os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import sys
 import time
 from typing import Union
@@ -23,6 +21,7 @@ from pipeline.PoseEstimator import SquareTargetPoseEstimator
 DEMO_ID = 29
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     config = ConfigStore(LocalConfig(), RemoteConfig())
     local_config_source: ConfigSource = FileConfigSource()
     remote_config_source: ConfigSource = NTConfigSource()
