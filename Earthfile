@@ -41,7 +41,7 @@ py-deps:
     RUN apt-get update -y && apt-get install -y dh-autoreconf
     # If gfortran-aarch64-linux-gnu does not exist, we are on arm64, so just install gfortran
     RUN apt-get update -y && (apt-get install -y gfortran-aarch64-linux-gnu || apt-get install -y gfortran)
-    RUN TARGETPLATFORM=linux/arm64 xx-apt-get update -y && TARGETPLATFORM=linux/arm64 xx-apt-get install -y libopenblas-dev libjpeg-dev vim libblas3 v4l-utils
+    RUN TARGETPLATFORM=linux/arm64 xx-apt-get update -y && TARGETPLATFORM=linux/arm64 xx-apt-get install -y libopenblas-dev libjpeg-dev
     RUN wget https://files.pythonhosted.org/packages/a4/9b/027bec52c633f6556dba6b722d9a0befb40498b9ceddd29cbe67a45a127c/numpy-1.24.4.tar.gz
     RUN tar -zvxf numpy-1.24.4.tar.gz
     COPY numpy-aarch64-linux-gnu-site.cfg numpy-1.24.4/site.cfg
@@ -92,6 +92,7 @@ gst-bin:
 
 ns-image:
     FROM --platform=linux/arm64 debian:bookworm-20240110
+    RUN apt-get update -y && apt-get install -y vim libblas3 v4l-utils
     COPY --symlink-no-follow +sysroot-openblas-alternatives/* /etc/alternatives
     COPY --symlink-no-follow +sysroot-libs/* /usr/lib/aarch64-linux-gnu
     COPY --symlink-no-follow +gst-bin/* /usr/bin/
