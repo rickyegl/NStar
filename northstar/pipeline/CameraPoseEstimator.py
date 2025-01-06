@@ -2,13 +2,15 @@ from typing import List, Union
 
 import cv2
 import numpy
+import json
+
 from config.config import ConfigStore
 from vision_types import CameraPoseObservation, FiducialImageObservation
 from wpimath.geometry import *
 
 from pipeline.coordinate_systems import (openCvPoseToWpilib,
                                          wpilibTranslationToOpenCv)
-
+import os
 
 class CameraPoseEstimator:
     def __init__(self) -> None:
@@ -20,14 +22,20 @@ class CameraPoseEstimator:
 
 class MultiTargetCameraPoseEstimator(CameraPoseEstimator):
     def __init__(self) -> None:
+        self.tag_layout = {}
+        if self.tag_layout == {} or True:
+            with open("2024-crescendo.json", 'r') as file:
+                self.tag_layout = json.load(file)
+                #print(self.tag_layout)
+            return None
         pass
 
     def solve_camera_pose(self, image_observations: List[FiducialImageObservation], config_store: ConfigStore) -> Union[CameraPoseObservation, None]:
         # Exit if no tag layout available
-        if config_store.remote_config.tag_layout == None:
-            return None
-
+        #print("Tag layout: "+ str(self.tag_layout))
+        
         # Exit if no observations available
+        #print(str(len(image_observations))+" observations")
         if len(image_observations) == 0:
             return None
 
@@ -39,7 +47,7 @@ class MultiTargetCameraPoseEstimator(CameraPoseEstimator):
         tag_poses = []
         for observation in image_observations:
             tag_pose = None
-            for tag_data in config_store.remote_config.tag_layout["tags"]:
+            for tag_data in self.tag_layout["tags"]:
                 if tag_data["ID"] == observation.tag_id:
                     tag_pose = Pose3d(
                         Translation3d(
@@ -79,6 +87,7 @@ class MultiTargetCameraPoseEstimator(CameraPoseEstimator):
                 tag_poses.append(tag_pose)
 
         # Single tag, return two poses
+        #print(str(len(tag_ids))+" tags")
         if len(tag_ids) == 1:
             object_points = numpy.array([[-fid_size / 2.0, fid_size / 2.0, 0.0],
                                          [fid_size / 2.0, fid_size / 2.0, 0.0],
