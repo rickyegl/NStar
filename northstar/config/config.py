@@ -22,7 +22,8 @@ class RemoteConfig:
     camera_exposure: int = 1
     camera_gain: int = 25
     fiducial_size_m: float = 0.1651
-    tag_layout: any = None
+    tag_layout: any = ""
+    tag_layout_name: any = "2025-reefscape.json"
 
 
 @dataclass
