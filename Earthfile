@@ -92,7 +92,6 @@ gst-bin:
 
 ns-image:
     FROM --platform=linux/arm64 debian:bookworm-20240110
-    RUN apt-get update -y && apt-get install -y vim
     COPY --symlink-no-follow +sysroot-openblas-alternatives/* /etc/alternatives
     COPY --symlink-no-follow +sysroot-libs/* /usr/lib/aarch64-linux-gnu
     COPY --symlink-no-follow +gst-bin/* /usr/bin/
