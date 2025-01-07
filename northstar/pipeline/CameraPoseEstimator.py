@@ -24,7 +24,7 @@ class MultiTargetCameraPoseEstimator(CameraPoseEstimator):
     def __init__(self) -> None:
         self.tag_layout = {}
         if self.tag_layout == {} or True:
-            with open("2024-crescendo.json", 'r') as file:
+            with open(config_store.remote_config.tag_layout_name, 'r') as file:
                 self.tag_layout = json.load(file)
                 #print(self.tag_layout)
             return None
