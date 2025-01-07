@@ -5,7 +5,7 @@ import numpy.typing
 
 @dataclass
 class LocalConfig:
-    device_id: str = "xenic"
+    device_id: str = "northstar"
     server_ip: str = "10.66.47.2"
     stream_port: int = 8000
     has_calibration: bool = True
