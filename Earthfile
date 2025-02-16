@@ -48,6 +48,7 @@ py-deps:
     RUN pip3 install -v ./numpy-1.24.4
     RUN pip3 install --find-links https://tortall.net/~robotpy/wheels/2023/raspbian pyntcore
     RUN pip3 install --find-links https://tortall.net/~robotpy/wheels/2023/raspbian robotpy-wpimath==2023.4.3.1
+    RUN pip3 install coremltools==8.2
     RUN LDFLAGS="-L/usr/lib/aarch64-linux-gnu" CFLAGS="-I/usr/include/aarch64-linux-gnu" pip3 install -v pillow
     SAVE ARTIFACT /RobotCode2024/vision/cross_venv/cross
     SAVE IMAGE --cache-hint
