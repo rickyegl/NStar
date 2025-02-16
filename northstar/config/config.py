@@ -1,29 +1,45 @@
+# Copyright (c) 2025 FRC 6328
+# http://github.com/Mechanical-Advantage
+#
+# Use of this source code is governed by an MIT-style
+# license that can be found in the LICENSE file at
+# the root directory of this project.
+
 from dataclasses import dataclass
+
 import numpy
 import numpy.typing
 
 
 @dataclass
 class LocalConfig:
-    device_id: str = "northstar"
-    server_ip: str = "10.66.47.2"
-    stream_port: int = 8000
-    has_calibration: bool = True
-    camera_matrix: numpy.typing.NDArray[numpy.float64] = numpy.array([])
-    distortion_coefficients: numpy.typing.NDArray[numpy.float64] = numpy.array([])
+    device_id: str = ""
+    server_ip: str = ""
+    apriltags_stream_port: int = 8000
+    objdetect_stream_port: int = 8001
+    capture_impl: str = ""
+    obj_detect_model: str = ""
+    obj_detect_max_fps: int = -1
+    apriltags_enable: bool = False
+    objdetect_enable: bool = True
+    video_folder: str = ""
+    has_calibration: bool = False
+    camera_matrix: numpy.typing.NDArray[numpy.float64] = None
+    distortion_coefficients: numpy.typing.NDArray[numpy.float64] = None
 
 
 @dataclass
 class RemoteConfig:
-    camera_id: int = 0
-    camera_resolution_width: int = 1600
-    camera_resolution_height: int = 1200
-    camera_auto_exposure: int = 1
-    camera_exposure: int = 1
-    camera_gain: int = 25
-    fiducial_size_m: float = 0.1651
-    tag_layout: any = ""
-    tag_layout_name: any = "2025-reefscape.json"
+    camera_id: str = ""
+    camera_resolution_width: int = 0
+    camera_resolution_height: int = 0
+    camera_auto_exposure: int = 0
+    camera_exposure: int = 0
+    camera_gain: float = 0
+    fiducial_size_m: float = 0
+    tag_layout: any = None
+    is_recording: bool = False
+    timestamp: int = 0
 
 
 @dataclass
