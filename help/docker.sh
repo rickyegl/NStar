@@ -13,8 +13,10 @@ docker run -it --name northstar1 -p 8000:8000 --restart=unless-stopped --device=
 
 //access filesystem
 docker exec -it northstar1 /bin/bash
+docker inspect 68b914cedce4 | grep UpperDir
 
-docker inspect e0beb7a2e65f | grep UpperDir
+//deatatch
+ctrl p ctrl q
 
 //override entrypoint
 docker run -it --entrypoint /bin/bash --name northstar1 -p 8000:8000 --restart=unless-stopped --device=/dev/video0:/dev/video0 rickyegl/northstar
