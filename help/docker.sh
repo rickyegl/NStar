@@ -9,13 +9,15 @@ pscp "%USERPROFILE%\Downloads\docker-image.zip" orangepi@10.66.47.222:/home/oran
 unzip -o docker-image.zip
 
 docker load -i northstar.tar
-docker run -it --name northstar -p 8000:8000 --restart=unless-stopped --device=/dev/video0:/dev/video0 rickyegl/northstar
+docker run -it --name northstar1 -p 8000:8000 --restart=unless-stopped --device=/dev/video0:/dev/video0 rickyegl/northstar
 
 //access filesystem
-docker exec -it northstar /bin/bash
+docker exec -it northstar1 /bin/bash
+
+docker inspect e0beb7a2e65f | grep UpperDir
 
 //override entrypoint
-docker run -it --entrypoint /bin/bash --name northstar -p 8000:8000 --restart=unless-stopped --device=/dev/video0:/dev/video0 rickyegl/northstar
+docker run -it --entrypoint /bin/bash --name northstar1 -p 8000:8000 --restart=unless-stopped --device=/dev/video0:/dev/video0 rickyegl/northstar
 
 //install pip
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
